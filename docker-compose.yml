@@ -1,0 +1,11 @@
+version: '3'
+services: 
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes: 
+      - .:/usr/src/app
+    ports: 
+      - "7777:7777"
+    restart: always

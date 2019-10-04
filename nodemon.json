@@ -1,0 +1,8 @@
+{
+    "env": {
+      "MONGO_USER": "admin",
+      "MONGO_PASSWORD": "root",
+      "MONGO_DB": "bet2m",
+      "jwtKey": "my_secret_key"
+    }
+}
