@@ -199,16 +199,49 @@ router.route('/v0.1/login')
         expiresIn: jwtExpirySeconds
       })
       if (validPass) {
-        res.header('auth-token', token).json({
-          status: 1
+        const status = `SELECT status FROM admin_login WHERE username = '${body.username}'`
+        query(status).then(status => {
+          var login = status[0].status
+          var date = new Date()
+          console.log(date)
+          var event = date.toISOString()
+          console.log(event)
+          if (login != 1) {
+            const updateLogin = `UPDATE admin_login SET status = 1, last_login='${event}' WHERE username = '${body.username}'`
+            console.log(updateLogin)
+            query(updateLogin).then(resp => {
+              res.header('auth-token', token).json({
+                status: 1,
+                username: body.username
+              })
+            })
+          } else {
+            res.json({
+              status: 2
+            })
+          }
         })
-      }else{
+      } else {
         res.json({
           status: 0
         })
       }
     })
 
+  })
+
+router.route('/v0.1/logout')
+  
+  .post(async (req, res) => {
+    const body = req.body
+    const sql = `UPDATE admin_login SET status = 0 WHERE username = '${body.username}'`
+    query(sql).then(resp => {
+      if(resp){
+        res.json({
+          message: 'logout!!'
+        })
+      }
+    })
   })
 
 

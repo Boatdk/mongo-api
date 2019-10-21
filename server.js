@@ -1,9 +1,10 @@
-var app = require('./app')
-var port = 7777
-var mongoose = require('mongoose')
-var user = require('./routes/user')
+const app = require('./app')
+const port = 7777
+const user = require('./routes/user')
+const player = require('./routes/player')
 
 app.use('/api', user)
+app.use('/api', player)
 
 // mongoose.Promise = global.Promise
 // const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-mvcy8.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
