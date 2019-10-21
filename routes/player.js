@@ -34,14 +34,14 @@ router.route('/v0.1/player')
                         db(creditLog).then(creditLog => {
                           db(promotion).then(promotion => {
                             db(transferLog).then(transferLog => {
-                              if (megaF == '')
-                                megaF = '-'
-                              if (jokerF == '')
-                                jokerF = '-'
-                              if (joker == '')
-                                joker = '-'
-                              if (mega == '')
-                                mega = '-'
+                              // if (megaF == '')
+                              //   megaF = '-'
+                              // if (jokerF == '')
+                              //   jokerF = '-'
+                              // if (joker == '')
+                              //   joker = '-'
+                              // if (mega == '')
+                              //   mega = '-'
                               res.json({
                                 data: player,
                                 mega: mega,
