@@ -1,5 +1,28 @@
 version: '3'
-services: 
+services:
+  db1:
+    image: mariadb:latest
+    container_name: db1
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - "TZ=Asia/Bangkok"
+    volumes:
+      - /home/boatdk/mysql:/var/lib/mysql
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+     - PMA_ARBITRARY=0
+     - PMA_HOST=db1
+     - "TZ=Asia/Bangkok"
+    restart: always
+    depends_on:
+     - db1
+    ports:
+     - 8090:80
+     
   api:
     build: 
       context: .
