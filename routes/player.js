@@ -18,11 +18,12 @@ router.route('/v0.1/player')
       var withdrawLog = `SELECT * FROM withdraw_log WHERE login_id = ${id} ORDER BY create_date DESC`
       var bonusLog = `SELECT * FROM bonus_log WHERE user_id = ${id} ORDER BY create_date DESC LIMIT 100`
       var creditLog = `SELECT * FROM credit_code_log WHERE user_id = ${id} ORDER BY create_date DESC`
+      var transferLog = `SELECT * FROM transfer_log WHERE login_id = ${id} ORDER BY create_date DESC LIMIT 100`
       var promotion = `SELECT * FROM promotion`
       db(getPlayer).then(player => {
         if (player != '') {
           console.log("===== player information =====")
-          
+
           db(getMega).then(mega => {
             db(getJoker).then(joker => {
               db(getMegaFree).then(megaF => {
@@ -32,26 +33,29 @@ router.route('/v0.1/player')
                       db(bonusLog).then(bonusLog => {
                         db(creditLog).then(creditLog => {
                           db(promotion).then(promotion => {
-                            if(megaF == '')
-                              megaF = '-'
-                            if(jokerF == '')
-                              jokerF = '-'
-                            if(joker == '')
-                              joker = '-'
-                            if(mega == '')
-                              mega = '-'
-                            res.json({
-                              data: player,
-                              mega: mega,
-                              joker: joker,
-                              megaFree: megaF,
-                              jokerFree: jokerF,
-                              deposit: depositLog,
-                              withdraw: withdrawLog,
-                              bonus: bonusLog,
-                              creditFree: creditLog,
-                              promotion: promotion,
-                              status: 1
+                            db(transferLog).then(transferLog => {
+                              if (megaF == '')
+                                megaF = '-'
+                              if (jokerF == '')
+                                jokerF = '-'
+                              if (joker == '')
+                                joker = '-'
+                              if (mega == '')
+                                mega = '-'
+                              res.json({
+                                data: player,
+                                mega: mega,
+                                joker: joker,
+                                megaFree: megaF,
+                                jokerFree: jokerF,
+                                deposit: depositLog,
+                                withdraw: withdrawLog,
+                                bonus: bonusLog,
+                                creditFree: creditLog,
+                                transferLog: transferLog,
+                                promotion: promotion,
+                                status: 1
+                              })
                             })
                           })
                         })
@@ -62,7 +66,7 @@ router.route('/v0.1/player')
               })
             })
           })
-          
+
         } else {
           res.json({
             message: "dont have account",
@@ -72,7 +76,7 @@ router.route('/v0.1/player')
 
       })
     } else {
-      getPlayer = `SELECT * FROM player`
+      getPlayer = `SELECT * FROM player ORDER BY create_date DESC`
       db(getPlayer).then(player => {
         if (player != '')
           res.json({
