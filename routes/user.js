@@ -203,12 +203,9 @@ router.route('/v0.1/login')
         query(status).then(status => {
           var login = status[0].status
           var date = new Date()
-          console.log(date)
           var event = date.toISOString().split('T')[0] + ' ' + date.toTimeString().split(' ')[0];
-          console.log(event)
           if (login != 1) {
             const updateLogin = `UPDATE admin_login SET status = 1, last_login='${event}' WHERE username = '${body.username}'`
-            console.log(updateLogin)
             query(updateLogin).then(resp => {
               res.header('auth-token', token).json({
                 status: 1,
