@@ -9,22 +9,23 @@ router.route('/v0.1/summary')
     var date = new Date()
     var now = date.toISOString().split('T')[0]
     console.log(now)
-    const totalDeposit_staff = `SELECT SUM(amount_current) AS total_joker_deposit, COUNT(*) AS total_deposit 
+    const totalDeposit_staff = `SELECT SUM(amount_current) AS total_deposit, COUNT(*) AS count_deposit 
     FROM deposit_log WHERE agent = 'Nikigame' AND status = '1'
     AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'staff'`
 
-    const totalDeposit_system = `SELECT SUM(amount_current) AS total_joker_deposit, COUNT(*) AS total_deposit 
+    const totalDeposit_system = `SELECT SUM(amount_current) AS total_deposit, COUNT(*) AS count_deposit 
     FROM deposit_log WHERE agent = 'Nikigame' AND status = '1'
     AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'system'`
+    console.log(totalDeposit_system)
 
-    const totalWithdraw_staff = `SELECT SUM(amount) AS total_joker_withdraw, COUNT(*) AS total_withdraw
+    const totalWithdraw_staff = `SELECT SUM(amount) AS total_withdraw, COUNT(*) AS count_withdraw
     FROM withdraw_log WHERE agent = 'wallet' AND status = '1'
     AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'staff'`
 
-    const totalWithdraw_system = `SELECT SUM(amount) AS total_joker_withdraw, COUNT(*) AS total_withdraw 
+    const totalWithdraw_system = `SELECT SUM(amount) AS total_withdraw, COUNT(*) AS count_withdraw 
     FROM withdraw_log WHERE agent = 'wallet' AND status = '1'
     AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'system'`
@@ -33,11 +34,27 @@ router.route('/v0.1/summary')
       db(totalDeposit_system).then(depositSystem => {
         db(totalWithdraw_staff).then(withdrawStaff => {
           db(totalWithdraw_system).then(withdrawSystem => {
-            if(depositStaff && depositSystem && withdrawStaff && withdrawSystem){
-              var deposit = parseFloat(depositStaff[0].total_joker_deposit) + parseFloat(depositSystem[0].total_joker_deposit)
-              var countDeposit = parseInt(depositStaff[0].total_deposit) + parseInt(depositSystem[0].total_deposit)
-              var withdraw = parseFloat(withdrawStaff[0].total_joker_withdraw) + parseFloat(withdrawSystem[0].total_joker_withdraw)
-              var countWithdraw = parseInt(withdrawStaff[0].total_withdraw) + parseInt(withdrawSystem[0].total_withdraw)
+            if (depositStaff && depositSystem && withdrawStaff && withdrawSystem) {
+              var deposit_staff = parseFloat(depositStaff[0].total_deposit)
+              var deposit_system = parseFloat(depositSystem[0].total_deposit)
+              var withdraw_staff = parseFloat(withdrawStaff[0].total_withdraw)
+              var withdraw_system = parseFloat(withdrawSystem[0].total_withdraw)
+              if (depositStaff[0].total_deposit == null) {
+                deposit_staff = 0
+              }
+              if (depositSystem[0].total_deposit == null) {
+                deposit_system = 0
+              }
+              if (withdrawStaff[0].total_withdraw == null) {
+                withdraw_staff = 0
+              }
+              if (withdrawSystem[0].total_withdraw == null) {
+                withdraw_system = 0
+              }
+              var deposit = deposit_staff + deposit_system
+              var countDeposit = parseInt(depositStaff[0].count_deposit) + parseInt(depositSystem[0].count_deposit)
+              var withdraw = withdraw_staff + withdraw_system
+              var countWithdraw = parseInt(withdrawStaff[0].count_withdraw) + parseInt(withdrawSystem[0].count_withdraw)
               res.json({
                 deposit: deposit,
                 count_deposit: countDeposit,
