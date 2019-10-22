@@ -79,6 +79,7 @@ router.route('/v0.1/player')
       })
     } else {
       getPlayer = `SELECT * FROM player ORDER BY create_date DESC`
+      console.log(getPlayer)
       db(getPlayer).then(player => {
         if (player != '')
           res.json({
