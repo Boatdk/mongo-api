@@ -10,6 +10,7 @@ router.route('/v0.1/player')
     var getPlayer
     if (id) {
       getPlayer = `SELECT * FROM player WHERE login_id = ${id}`
+      var getNiki = `SELECT * FROM agent_niki WHERE login_id = ${id}`
       var getMega = `SELECT * FROM agent_mega888 WHERE player_id = ${id}`
       var getJoker = `SELECT * FROM agent_joker WHERE player_id = ${id}`
       var getMegaFree = `SELECT * FROM agent_mega888_free WHERE player_id = ${id}`
@@ -34,27 +35,22 @@ router.route('/v0.1/player')
                         db(creditLog).then(creditLog => {
                           db(promotion).then(promotion => {
                             db(transferLog).then(transferLog => {
-                              // if (megaF == '')
-                              //   megaF = '-'
-                              // if (jokerF == '')
-                              //   jokerF = '-'
-                              // if (joker == '')
-                              //   joker = '-'
-                              // if (mega == '')
-                              //   mega = '-'
-                              res.json({
-                                data: player,
-                                mega: mega,
-                                joker: joker,
-                                megaFree: megaF,
-                                jokerFree: jokerF,
-                                deposit: depositLog,
-                                withdraw: withdrawLog,
-                                bonus: bonusLog,
-                                creditFree: creditLog,
-                                transferLog: transferLog,
-                                promotion: promotion,
-                                status: 1
+                              db(getNiki).then(niki => {
+                                res.json({
+                                  data: player,
+                                  niki: niki,
+                                  mega: mega,
+                                  joker: joker,
+                                  megaFree: megaF,
+                                  jokerFree: jokerF,
+                                  deposit: depositLog,
+                                  withdraw: withdrawLog,
+                                  bonus: bonusLog,
+                                  creditFree: creditLog,
+                                  transferLog: transferLog,
+                                  promotion: promotion,
+                                  status: 1
+                                })
                               })
                             })
                           })
@@ -94,5 +90,73 @@ router.route('/v0.1/player')
     console.log(getPlayer)
 
   })
+
+router.route('/v0.1/block')
+
+  .post((req, res) => {
+    const body = req.body
+    var id = body.id
+    var token = body.token
+    var validBlock = `SELECT * FROM player WHERE login_id = ${id}`
+    db(validBlock).then(data => {
+      var validToken = data[0].token
+      var validId = data[0].login_id
+      if (token == validToken && id == validId) {
+        var blockPlayer = `UPDATE player SET status = 0 WHERE token = '${token}'`
+        console.log(blockPlayer)
+        db(blockPlayer).then(result => {
+          if (result.protocol41) {
+            res.json({
+              status: 1,
+              message: "update successfully"
+            })
+          }else{
+            res.json({
+              status: 0,
+              message: "update fail"
+            })
+          }
+        })
+      }else{
+        res.json({
+          message: "Dont have this account or Invalid token"
+        })
+      }
+    })
+  })
+
+router.route('/v0.1/unblock')
+
+  .post((req, res) => {
+    const body = req.body
+    var id = body.id
+    var token = body.token
+    var validPlayer = `SELECT * FROM player WHERE login_id = ${id}`
+    db(validPlayer).then(data => {
+      var validToken = data[0].token
+      var validId = data[0].login_id
+      if (token == validToken && id == validId){
+        var unblockPlayer = `UPDATE player SET status = 1 WHERE token = '${token}'`
+        db(unblockPlayer).then(result => {
+          if(result.protocol41){
+            res.json({
+              status: 1,
+              message: "unblock successfully"
+            })
+          }else{
+            res.json({
+              status: 0,
+              message: "Error"
+            })
+          }
+        })
+      }else{
+        res.json({
+          message: "Dont have this account or Invalid token"
+        })
+      }
+    })
+  })
+
 
 module.exports = router
