@@ -48,12 +48,12 @@ router.route('/v0.1/player')
                                   joker: joker[0],
                                   megaFree: megaF[0],
                                   jokerFree: jokerF[0],
-                                  deposit: depositLog[0],
-                                  withdraw: withdrawLog[0],
-                                  bonus: bonusLog[0],
-                                  creditFree: creditLog[0],
-                                  transferLog: transferLog[0],
-                                  promotion: promotion[0],
+                                  deposit: depositLog,
+                                  withdraw: withdrawLog,
+                                  bonus: bonusLog,
+                                  creditFree: creditLog,
+                                  transferLog: transferLog,
+                                  promotion: promotion,
                                   total_wallet: money,
                                   status: 1
                                 })
