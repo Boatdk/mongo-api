@@ -83,7 +83,7 @@ router.route('/v0.1/player')
       db(getPlayer).then(player => {
         if (player != '')
           res.json({
-            data: player[0],
+            data: player,
             status: 1
           })
         else {
