@@ -9,17 +9,17 @@ router.route('/v0.1/player')
     var id = query.id
     var getPlayer
     if (id) {
-      getPlayer = `SELECT * FROM player WHERE login_id = ${id}`
-      var getNiki = `SELECT * FROM agent_niki WHERE login_id = ${id}`
-      var getMega = `SELECT * FROM agent_mega888 WHERE player_id = ${id}`
-      var getJoker = `SELECT * FROM agent_joker WHERE player_id = ${id}`
-      var getMegaFree = `SELECT * FROM agent_mega888_free WHERE player_id = ${id}`
-      var getJokerFree = `SELECT * FROM agent_joker_free WHERE player_id = ${id}`
-      var depositLog = `SELECT * FROM deposit_log WHERE user_id = ${id} ORDER BY create_date DESC`
-      var withdrawLog = `SELECT * FROM withdraw_log WHERE login_id = ${id} ORDER BY create_date DESC`
-      var bonusLog = `SELECT * FROM bonus_log WHERE user_id = ${id} ORDER BY create_date DESC LIMIT 100`
-      var creditLog = `SELECT * FROM credit_code_log WHERE user_id = ${id} ORDER BY create_date DESC`
-      var transferLog = `SELECT * FROM transfer_log WHERE login_id = ${id} ORDER BY create_date DESC LIMIT 100`
+      getPlayer = `SELECT * FROM player WHERE login_id = '${id}'`
+      var getNiki = `SELECT * FROM agent_niki WHERE login_id = '${id}'`
+      var getMega = `SELECT * FROM agent_mega888 WHERE player_id = '${id}'`
+      var getJoker = `SELECT * FROM agent_joker WHERE player_id = '${id}'`
+      var getMegaFree = `SELECT * FROM agent_mega888_free WHERE player_id = '${id}'`
+      var getJokerFree = `SELECT * FROM agent_joker_free WHERE player_id = '${id}'`
+      var depositLog = `SELECT * FROM deposit_log WHERE user_id = '${id}' ORDER BY create_date DESC`
+      var withdrawLog = `SELECT * FROM withdraw_log WHERE login_id = '${id}' ORDER BY create_date DESC`
+      var bonusLog = `SELECT * FROM bonus_log WHERE user_id = '${id}' ORDER BY create_date DESC LIMIT 100`
+      var creditLog = `SELECT * FROM credit_code_log WHERE user_id = '${id}' ORDER BY create_date DESC`
+      var transferLog = `SELECT * FROM transfer_log WHERE login_id = '${id}' ORDER BY create_date DESC LIMIT 100`
       var promotion = `SELECT * FROM promotion`
       db(getPlayer).then(player => {
         if (player != '') {
