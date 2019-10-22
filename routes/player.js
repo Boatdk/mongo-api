@@ -36,6 +36,10 @@ router.route('/v0.1/player')
                           db(promotion).then(promotion => {
                             db(transferLog).then(transferLog => {
                               db(getNiki).then(niki => {
+                                var wallet = parseFloat(player[0].balance)
+                                var jokerWallet = parseFloat(joker[0].balance)
+                                var megaWallet = parseFloat(mega[0].balance)
+                                var money = wallet + jokerWallet + megaWallet
                                 res.json({
                                   data: player,
                                   niki: niki,
@@ -49,6 +53,7 @@ router.route('/v0.1/player')
                                   creditFree: creditLog,
                                   transferLog: transferLog,
                                   promotion: promotion,
+                                  total_wallet: money,
                                   status: 1
                                 })
                               })
@@ -109,14 +114,14 @@ router.route('/v0.1/block')
               status: 1,
               message: "update successfully"
             })
-          }else{
+          } else {
             res.json({
               status: 0,
               message: "update fail"
             })
           }
         })
-      }else{
+      } else {
         res.json({
           message: "Dont have this account or Invalid token"
         })
@@ -134,22 +139,22 @@ router.route('/v0.1/unblock')
     db(validPlayer).then(data => {
       var validToken = data[0].token
       var validId = data[0].login_id
-      if (token == validToken && id == validId){
+      if (token == validToken && id == validId) {
         var unblockPlayer = `UPDATE player SET status = 1 WHERE token = '${token}'`
         db(unblockPlayer).then(result => {
-          if(result.protocol41){
+          if (result.protocol41) {
             res.json({
               status: 1,
               message: "unblock successfully"
             })
-          }else{
+          } else {
             res.json({
               status: 0,
               message: "Error"
             })
           }
         })
-      }else{
+      } else {
         res.json({
           message: "Dont have this account or Invalid token"
         })
