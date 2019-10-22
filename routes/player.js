@@ -42,18 +42,18 @@ router.route('/v0.1/player')
                                 var nikiWallet = parseFloat(niki[0].balance)
                                 var money = wallet + jokerWallet + megaWallet + nikiWallet
                                 res.json({
-                                  data: player,
-                                  niki: niki,
-                                  mega: mega,
-                                  joker: joker,
-                                  megaFree: megaF,
-                                  jokerFree: jokerF,
-                                  deposit: depositLog,
-                                  withdraw: withdrawLog,
-                                  bonus: bonusLog,
-                                  creditFree: creditLog,
-                                  transferLog: transferLog,
-                                  promotion: promotion,
+                                  data: player[0],
+                                  niki: niki[0],
+                                  mega: mega[0],
+                                  joker: joker[0],
+                                  megaFree: megaF[0],
+                                  jokerFree: jokerF[0],
+                                  deposit: depositLog[0],
+                                  withdraw: withdrawLog[0],
+                                  bonus: bonusLog[0],
+                                  creditFree: creditLog[0],
+                                  transferLog: transferLog[0],
+                                  promotion: promotion[0],
                                   total_wallet: money,
                                   status: 1
                                 })
@@ -83,7 +83,7 @@ router.route('/v0.1/player')
       db(getPlayer).then(player => {
         if (player != '')
           res.json({
-            data: player,
+            data: player[0],
             status: 1
           })
         else {
@@ -176,7 +176,7 @@ router.route('/v0.1/blacklist')
         })
       }else{
         res.json({
-          data: blocklist,
+          data: blocklist[0],
           status: 1
         })
       }
