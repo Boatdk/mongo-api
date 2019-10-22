@@ -10,7 +10,7 @@ router.route('/v0.1/player')
     var getPlayer
     if (id) {
       getPlayer = `SELECT * FROM player WHERE login_id = '${id}'`
-      var getNiki = `SELECT * FROM agent_niki WHERE login_id = '${id}'`
+      var getNiki = `SELECT * FROM agent_niki WHERE player_id = '${id}'`
       var getMega = `SELECT * FROM agent_mega888 WHERE player_id = '${id}'`
       var getJoker = `SELECT * FROM agent_joker WHERE player_id = '${id}'`
       var getMegaFree = `SELECT * FROM agent_mega888_free WHERE player_id = '${id}'`
@@ -87,7 +87,6 @@ router.route('/v0.1/player')
         }
       })
     }
-    console.log(getPlayer)
 
   })
 
