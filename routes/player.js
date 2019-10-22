@@ -167,7 +167,7 @@ router.route('/v0.1/unblock')
 router.route('/v0.1/blacklist')
 
   .get((req, res) => {
-    const blocklist = `SELECT * FROM player WHERE status=0`
+    const blocklist = `SELECT * FROM player WHERE status=0 ORDER BY create_date DESC`
     db(blocklist).then(blocklist => {
       if(!blocklist){
         res.json({
@@ -176,7 +176,7 @@ router.route('/v0.1/blacklist')
         })
       }else{
         res.json({
-          data: blocklist[0],
+          data: blocklist,
           status: 1
         })
       }
