@@ -39,7 +39,8 @@ router.route('/v0.1/player')
                                 var wallet = parseFloat(player[0].balance)
                                 var jokerWallet = parseFloat(joker[0].balance)
                                 var megaWallet = parseFloat(mega[0].balance)
-                                var money = wallet + jokerWallet + megaWallet
+                                var nikiWallet = parseFloat(niki[0].balance)
+                                var money = wallet + jokerWallet + megaWallet + nikiWallet
                                 res.json({
                                   data: player,
                                   niki: niki,
