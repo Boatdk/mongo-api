@@ -164,5 +164,24 @@ router.route('/v0.1/unblock')
     })
   })
 
+router.route('/v0.1/blacklist')
+
+  .get((req, res) => {
+    const blocklist = `SELECT * FROM player WHERE status=0`
+    db(blocklist).then(blocklist => {
+      if(!blocklist){
+        res.json({
+          status: 0,
+          message: "Dont have blacklist"
+        })
+      }else{
+        res.json({
+          data: blocklist,
+          status: 1
+        })
+      }
+    })
+  })
+
 
 module.exports = router
