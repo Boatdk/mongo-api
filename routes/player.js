@@ -37,9 +37,18 @@ router.route('/v0.1/player')
                             db(transferLog).then(transferLog => {
                               db(getNiki).then(niki => {
                                 var wallet = parseFloat(player[0].balance)
-                                var jokerWallet = parseFloat(joker[0].balance)
-                                var megaWallet = parseFloat(mega[0].balance)
-                                var nikiWallet = parseFloat(niki[0].balance)
+                                var jokerWallet = 0
+                                var megaWallet = 0
+                                var nikiWallet = 0
+                                if(joker != ''){
+                                  jokerWallet = parseFloat(joker[0].balance)
+                                }
+                                if(mega != ''){
+                                  megaWallet = parseFloat(mega[0].balance)
+                                }
+                                if(niki != ''){
+                                  var nikiWallet = parseFloat(niki[0].balance)
+                                }
                                 var money = wallet + jokerWallet + megaWallet + nikiWallet
                                 res.json({
                                   data: player[0],
