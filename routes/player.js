@@ -15,7 +15,6 @@ router.route('/v0.1/player')
       var getJoker = `SELECT * FROM agent_joker WHERE player_id = '${id}'`
       var getMegaFree = `SELECT * FROM agent_mega888_free WHERE player_id = '${id}'`
       var getJokerFree = `SELECT * FROM agent_joker_free WHERE player_id = '${id}'`
-      var depositLog = `SELECT * FROM deposit_log WHERE user_id = '${id}' ORDER BY create_date DESC`
       var withdrawLog = `SELECT * FROM withdraw_log WHERE login_id = '${id}' ORDER BY create_date DESC`
       var bonusLog = `SELECT * FROM bonus_log WHERE user_id = '${id}' ORDER BY create_date DESC LIMIT 100`
       var creditLog = `SELECT * FROM credit_code_log WHERE user_id = '${id}' ORDER BY create_date DESC`
@@ -29,6 +28,7 @@ router.route('/v0.1/player')
             db(getJoker).then(joker => {
               db(getMegaFree).then(megaF => {
                 db(getJokerFree).then(jokerF => {
+                  var depositLog = `SELECT * FROM deposit_log WHERE user_id = '${player[0].user_id}' ORDER BY create_date DESC`
                   db(depositLog).then(depositLog => {
                     db(withdrawLog).then(withdrawLog => {
                       db(bonusLog).then(bonusLog => {
@@ -40,13 +40,13 @@ router.route('/v0.1/player')
                                 var jokerWallet = 0
                                 var megaWallet = 0
                                 var nikiWallet = 0
-                                if(joker != ''){
+                                if (joker != '') {
                                   jokerWallet = parseFloat(joker[0].balance)
                                 }
-                                if(mega != ''){
+                                if (mega != '') {
                                   megaWallet = parseFloat(mega[0].balance)
                                 }
-                                if(niki != ''){
+                                if (niki != '') {
                                   var nikiWallet = parseFloat(niki[0].balance)
                                 }
                                 var money = wallet + jokerWallet + megaWallet + nikiWallet
@@ -178,12 +178,12 @@ router.route('/v0.1/blacklist')
   .get((req, res) => {
     const blocklist = `SELECT * FROM player WHERE status=0 ORDER BY create_date DESC`
     db(blocklist).then(blocklist => {
-      if(!blocklist){
+      if (!blocklist) {
         res.json({
           status: 0,
           message: "Dont have blacklist"
         })
-      }else{
+      } else {
         res.json({
           data: blocklist,
           status: 1

@@ -5,24 +5,28 @@ const db = require('../utils/query')
 router.route('/v0.1/summary')
 
   .get((req, res) => {
+
+    var date = new Date()
+    var now = date.toISOString().split('T')[0]
+    console.log(now)
     const totalDeposit_staff = `SELECT SUM(amount_current) AS total_joker_deposit, COUNT(*) AS total_deposit 
     FROM deposit_log WHERE agent = 'Nikigame' AND status = '1'
-    AND (create_date BETWEEN '".date("Y-m-d")." 00:00:00' AND '".date("Y-m-d")." 23:59:59')
+    AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'staff'`
 
     const totalDeposit_system = `SELECT SUM(amount_current) AS total_joker_deposit, COUNT(*) AS total_deposit 
     FROM deposit_log WHERE agent = 'Nikigame' AND status = '1'
-    AND (create_date BETWEEN '".date("Y-m-d")." 00:00:00' AND '".date("Y-m-d")." 23:59:59')
+    AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'system'`
 
     const totalWithdraw_staff = `SELECT SUM(amount) AS total_joker_withdraw, COUNT(*) AS total_withdraw
     FROM withdraw_log WHERE agent = 'wallet' AND status = '1'
-    AND (create_date BETWEEN '".date("Y-m-d")." 00:00:00' AND '".date("Y-m-d")." 23:59:59')
+    AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'staff'`
 
     const totalWithdraw_system = `SELECT SUM(amount) AS total_joker_withdraw, COUNT(*) AS total_withdraw 
     FROM withdraw_log WHERE agent = 'wallet' AND status = '1'
-    AND (create_date BETWEEN '".date("Y-m-d")." 00:00:00' AND '".date("Y-m-d")." 23:59:59')
+    AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'system'`
 
     db(totalDeposit_staff).then(depositStaff => {
