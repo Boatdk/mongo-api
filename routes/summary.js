@@ -8,7 +8,6 @@ router.route('/v0.1/summary')
 
     var date = new Date()
     var now = date.toISOString().split('T')[0]
-    console.log(now)
     const totalDeposit_staff = `SELECT SUM(amount_current) AS total_deposit, COUNT(*) AS count_deposit 
     FROM deposit_log WHERE agent = 'Nikigame' AND status = '1'
     AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
@@ -18,7 +17,6 @@ router.route('/v0.1/summary')
     FROM deposit_log WHERE agent = 'Nikigame' AND status = '1'
     AND (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')
     AND create_by = 'system'`
-    console.log(totalDeposit_system)
 
     const totalWithdraw_staff = `SELECT SUM(amount) AS total_withdraw, COUNT(*) AS count_withdraw
     FROM withdraw_log WHERE agent = 'wallet' AND status = '1'
