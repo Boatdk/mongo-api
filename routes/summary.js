@@ -31,41 +31,49 @@ router.route('/v0.1/summary')
     AND create_by = 'system'`
 
     const countPlayer = `SELECT COUNT(*) AS count_player FROM player`
+    const bonus = `SELECT SUM(amount) AS total_bonus, COUNT(*) AS count_bonus 
+    FROM bonus_log WHERE (create_date BETWEEN '${now} 00:00:00' AND '${now} 23:59:59')`
 
     db(totalDeposit_staff).then(depositStaff => {
       db(totalDeposit_system).then(depositSystem => {
         db(totalWithdraw_staff).then(withdrawStaff => {
           db(totalWithdraw_system).then(withdrawSystem => {
             db(countPlayer).then(countPlayer => {
-              if (depositStaff && depositSystem && withdrawStaff && withdrawSystem) {
-                var deposit_staff = parseFloat(depositStaff[0].total_deposit)
-                var deposit_system = parseFloat(depositSystem[0].total_deposit)
-                var withdraw_staff = parseFloat(withdrawStaff[0].total_withdraw)
-                var withdraw_system = parseFloat(withdrawSystem[0].total_withdraw)
-                if (depositStaff[0].total_deposit == null) {
-                  deposit_staff = 0
+              db(bonus).then(bonus => {
+                if (depositStaff && depositSystem && withdrawStaff && withdrawSystem) {
+                  var deposit_staff = parseFloat(depositStaff[0].total_deposit)
+                  var deposit_system = parseFloat(depositSystem[0].total_deposit)
+                  var withdraw_staff = parseFloat(withdrawStaff[0].total_withdraw)
+                  var withdraw_system = parseFloat(withdrawSystem[0].total_withdraw)
+                  if (depositStaff[0].total_deposit == null) {
+                    deposit_staff = 0
+                  }
+                  if (depositSystem[0].total_deposit == null) {
+                    deposit_system = 0
+                  }
+                  if (withdrawStaff[0].total_withdraw == null) {
+                    withdraw_staff = 0
+                  }
+                  if (withdrawSystem[0].total_withdraw == null) {
+                    withdraw_system = 0
+                  }
+                  if (bonus[0].total_bonus == null) {
+                    bonus[0].total_bonus = 0
+                  }
+                  var deposit = deposit_staff + deposit_system
+                  var countDeposit = parseInt(depositStaff[0].count_deposit) + parseInt(depositSystem[0].count_deposit)
+                  var withdraw = withdraw_staff + withdraw_system
+                  var countWithdraw = parseInt(withdrawStaff[0].count_withdraw) + parseInt(withdrawSystem[0].count_withdraw)
+                  res.json({
+                    deposit: deposit,
+                    count_deposit: countDeposit,
+                    withdraw: withdraw,
+                    count_withdraw: countWithdraw,
+                    total_player: countPlayer[0].count_player,
+                    bonus: bonus[0]
+                  })
                 }
-                if (depositSystem[0].total_deposit == null) {
-                  deposit_system = 0
-                }
-                if (withdrawStaff[0].total_withdraw == null) {
-                  withdraw_staff = 0
-                }
-                if (withdrawSystem[0].total_withdraw == null) {
-                  withdraw_system = 0
-                }
-                var deposit = deposit_staff + deposit_system
-                var countDeposit = parseInt(depositStaff[0].count_deposit) + parseInt(depositSystem[0].count_deposit)
-                var withdraw = withdraw_staff + withdraw_system
-                var countWithdraw = parseInt(withdrawStaff[0].count_withdraw) + parseInt(withdrawSystem[0].count_withdraw)
-                res.json({
-                  deposit: deposit,
-                  count_deposit: countDeposit,
-                  withdraw: withdraw,
-                  count_withdraw: countWithdraw,
-                  total_player: countPlayer[0].count_player
-                })
-              }
+              })
             })
           })
         })
